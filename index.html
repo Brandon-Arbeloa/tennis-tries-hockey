@@ -102,6 +102,7 @@ a{color:var(--dt-neon-cyan)}
 .dt-kpi-label{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.22em;color:var(--dt-text-muted);text-transform:uppercase;margin-bottom:12px}
 .dt-kpi-value{font-family:var(--dt-font-display);font-size:44px;font-weight:700;line-height:1;color:var(--acc,var(--dt-neon-cyan));font-variant-numeric:tabular-nums;
   text-shadow:0 0 12px color-mix(in srgb,var(--acc,var(--dt-neon-cyan)) 50%,transparent),0 0 28px color-mix(in srgb,var(--acc,var(--dt-neon-cyan)) 22%,transparent)}
+#kCount{font-size:clamp(26px,2.6vw,34px);white-space:nowrap}
 .dt-kpi-unit{font-family:var(--dt-font-mono);font-size:13px;color:var(--dt-text-dim);margin-left:3px}
 .dt-kpi-sub{font-size:12px;color:var(--dt-text-muted);margin-top:8px}
 
@@ -617,17 +618,20 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
 
   // Countdowns
   const DRAFT=Date.parse("2026-09-27T19:30:00-05:00"), PUCK=Date.parse("2026-09-29T16:00:00-05:00");
+  const pad=n=>String(n).padStart(2,"0");
+  function parts(ms){ const t=Math.floor(ms/1000); return {d:Math.floor(t/86400),h:Math.floor(t%86400/3600),m:Math.floor(t%3600/60),s:t%60}; }
   function fmt(ms,long){
-    const d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4);
-    return long ? (d?d+"d ":"")+String(h).padStart(2,"0")+"h "+String(m).padStart(2,"0")+"m"
-                : d+'<span class="dt-kpi-unit">d</span> '+String(h).padStart(2,"0")+'<span class="dt-kpi-unit">h</span>';
+    const x=parts(ms), U=v=>'<span class="dt-kpi-unit">'+v+'</span>';
+    return long ? (x.d?x.d+"d ":"")+pad(x.h)+"h "+pad(x.m)+"m "+pad(x.s)+"s"
+                : (x.d?x.d+U("d")+" ":"")+pad(x.h)+U("h")+" "+pad(x.m)+U("m")+" "+pad(x.s)+U("s");
   }
   function tick(){
     const now=Date.now();
     const dl=DRAFT-now; $("#dCount").textContent = dl>0 ? fmt(dl,true) : (now-DRAFT<3*36e5 ? "LIVE NOW" : "DONE");
     const pl=PUCK-now; if(pl>0) $("#kCount").innerHTML=fmt(pl,false); else $("#kCount").textContent="LIVE";
   }
-  tick(); setInterval(tick,30000);
+  tick(); setInterval(tick,1000);
+  document.addEventListener("visibilitychange",()=>{ if(!document.hidden) tick(); });
 
 
   // Copy event details
