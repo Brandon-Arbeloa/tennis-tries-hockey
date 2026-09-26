@@ -574,7 +574,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
     <p class="cal-when">Sunday, Sept 27 · <b>7:30 PM CT</b><br><span>8:30 ET · 6:30 MT · 5:30 PT · 30-minute reminder included</span></p>
     <a class="cal-primary" id="calPrimary" href="#" target="_blank" rel="noopener">Add to calendar</a>
     <p class="cal-hint" id="calHint" hidden>Opens the event file. iPhone: tap <b>Add</b>. Mac: open the download and Calendar adds it.</p>
-    <p class="cal-or">Or pick yours</p>
+    <p class="cal-or" id="calOr">Or pick yours</p>
     <div class="cal-alt" id="calAlt"></div>
     <button class="cal-later" type="button" data-close>Maybe later</button>
   </div>
@@ -648,13 +648,14 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
     const iOS=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
     const mac=!iOS&&/Macintosh/.test(ua);
     document.querySelectorAll('[data-cal="apple"]').forEach(a=>{ a.href = ICS; a.removeAttribute("target"); if(!iOS) a.hidden = true; });
+    if(iOS) document.querySelectorAll('.a-cal [data-cal]:not([data-cal="apple"])').forEach(a=>a.hidden=true);
     window.__tthIOS=iOS;
   })();
   // Calendar prompt (pops once per viewer; remembers dismiss/add)
   (function(){
     const modal=$("#calModal"); if(!modal) return;
     const LABEL={google:"Google Calendar",apple:"Apple Calendar",outlook:"Outlook.com",o365:"Outlook 365"};
-    if(!window.__tthIOS) delete LABEL.apple;
+    if(!window.__tthIOS) delete LABEL.apple; else { delete LABEL.google; delete LABEL.outlook; delete LABEL.o365; }
     const links={}; document.querySelectorAll("[data-cal]").forEach(a=>links[a.dataset.cal]=a.href);
     const ua=navigator.userAgent||"";
     let pick="google";
@@ -665,6 +666,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
     const alt=$("#calAlt");
     Object.keys(LABEL).filter(k=>k!==pick).forEach(k=>{const a=document.createElement("a");a.href=links[k];if(k!=="apple")a.target="_blank";a.rel="noopener";a.textContent=LABEL[k];a.dataset.done="1";alt.append(a);});
     prim.dataset.done="1";
+    if(!alt.children.length) $("#calOr").hidden=true;
     if(pick==="apple"){ prim.removeAttribute("target"); const h=$("#calHint"); h.innerHTML = "Tap <b>Add All</b> on the screen that opens."; h.hidden=false; }
     const KEY="tth-cal-added";
     let added=null; try{ added=localStorage.getItem(KEY); localStorage.removeItem("tth-cal-prompt"); }catch(e){}
