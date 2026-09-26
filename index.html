@@ -431,7 +431,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
     <div class="a-cal">
       <span class="a-cal-label">Add to calendar</span>
       <a class="calbtn" data-cal="google" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Tennis+tries+Hockey+%C2%B7+Fantasy+Draft+Night&amp;dates=20260928T003000Z%2F20260928T023000Z&amp;details=Live+ESPN+Fantasy+Hockey+draft+for+the+Tennis+tries+Hockey+league.+All+7+managers+draft+together.%0A%0AJoin+the+draft+room+from+the+league+page+a+few+minutes+early%3A%0Ahttps%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880%0A%0ACan%27t+make+it%3F+ESPN+auto-drafts+for+you+from+your+pre-draft+rankings.&amp;location=ESPN+Fantasy+Hockey+%C2%B7+https%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880&amp;ctz=America%2FChicago" target="_blank" rel="noopener">Google <small>Gmail · Android</small></a>
-      <a class="calbtn" data-cal="apple" href="draft-night.ics" rel="noopener">Apple <small>iPhone · Mac</small></a>
+      <a class="calbtn" data-cal="apple" href="https://brandon-arbeloa.github.io/tennis-tries-hockey/draft-night.ics" rel="noopener">Apple <small>iPhone · Mac</small></a>
       <a class="calbtn" data-cal="outlook" href="https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&amp;rru=addevent&amp;subject=Tennis+tries+Hockey+%C2%B7+Fantasy+Draft+Night&amp;startdt=2026-09-28T00%3A30%3A00Z&amp;enddt=2026-09-28T02%3A30%3A00Z&amp;body=Live+ESPN+Fantasy+Hockey+draft+for+the+Tennis+tries+Hockey+league.+All+7+managers+draft+together.%3Cbr%3E%3Cbr%3EJoin+the+draft+room+from+the+league+page+a+few+minutes+early%3A%3Cbr%3Ehttps%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880%3Cbr%3E%3Cbr%3ECan%27t+make+it%3F+ESPN+auto-drafts+for+you+from+your+pre-draft+rankings.&amp;location=ESPN+Fantasy+Hockey+%C2%B7+https%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880" target="_blank" rel="noopener">Outlook.com <small>Hotmail · Live</small></a>
       <a class="calbtn" data-cal="o365" href="https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&amp;rru=addevent&amp;subject=Tennis+tries+Hockey+%C2%B7+Fantasy+Draft+Night&amp;startdt=2026-09-28T00%3A30%3A00Z&amp;enddt=2026-09-28T02%3A30%3A00Z&amp;body=Live+ESPN+Fantasy+Hockey+draft+for+the+Tennis+tries+Hockey+league.+All+7+managers+draft+together.%3Cbr%3E%3Cbr%3EJoin+the+draft+room+from+the+league+page+a+few+minutes+early%3A%3Cbr%3Ehttps%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880%3Cbr%3E%3Cbr%3ECan%27t+make+it%3F+ESPN+auto-drafts+for+you+from+your+pre-draft+rankings.&amp;location=ESPN+Fantasy+Hockey+%C2%B7+https%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880" target="_blank" rel="noopener">Outlook 365 <small>Work · School</small></a>
       <button class="calbtn copy" id="copyCal" type="button">Copy details <small>Anything else</small></button>
@@ -640,6 +640,16 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
   });
 
 
+
+  // Apple Calendar: iPhone/iPad get the event file (iOS shows "Add"); Macs get webcal:// which opens the Calendar app directly
+  (function(){
+    const ICS="https://brandon-arbeloa.github.io/tennis-tries-hockey/draft-night.ics";
+    const ua=navigator.userAgent||"";
+    const iOS=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+    const mac=!iOS&&/Macintosh/.test(ua);
+    document.querySelectorAll('[data-cal="apple"]').forEach(a=>{ a.href = mac ? ICS.replace(/^https:/,"webcal:") : ICS; a.removeAttribute("target"); });
+    window.__tthMac=mac;
+  })();
   // Calendar prompt (pops once per viewer; remembers dismiss/add)
   (function(){
     const modal=$("#calModal"); if(!modal) return;
@@ -652,9 +662,9 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
     else if(/Windows/.test(ua)) pick="outlook";
     const prim=$("#calPrimary"); prim.href=links[pick]; prim.textContent="Add to "+LABEL[pick];
     const alt=$("#calAlt");
-    Object.keys(LABEL).filter(k=>k!==pick).forEach(k=>{const a=document.createElement("a");a.href=links[k];a.target="_blank";a.rel="noopener";a.textContent=LABEL[k];a.dataset.done="1";alt.append(a);});
+    Object.keys(LABEL).filter(k=>k!==pick).forEach(k=>{const a=document.createElement("a");a.href=links[k];if(k!=="apple")a.target="_blank";a.rel="noopener";a.textContent=LABEL[k];a.dataset.done="1";alt.append(a);});
     prim.dataset.done="1";
-    if(pick==="apple") $("#calHint").hidden=false;
+    if(pick==="apple"){ prim.removeAttribute("target"); const h=$("#calHint"); h.innerHTML = window.__tthMac ? "Your Calendar app opens. Click <b>Subscribe</b>, then <b>OK</b>." : "Tap <b>Add All</b> on the screen that opens."; h.hidden=false; }
     const KEY="tth-cal-added";
     let added=null; try{ added=localStorage.getItem(KEY); localStorage.removeItem("tth-cal-prompt"); }catch(e){}
     let lastFocus=null;
