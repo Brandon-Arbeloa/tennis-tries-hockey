@@ -1,0 +1,24 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Tennis tries Hockey//Draft Night//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:tth-draft-2026-27@tennis-tries-hockey
+DTSTAMP:20260926T020000Z
+DTSTART:20260928T003000Z
+DTEND:20260928T023000Z
+SUMMARY:Tennis tries Hockey · Fantasy Draft Night
+LOCATION:ESPN Fantasy Hockey
+URL:https://fantasy.espn.com/hockey/league?leagueId=450310880
+DESCRIPTION:Live ESPN Fantasy Hockey draft. All 7 managers draft together.\
+ n\nJoin the draft room from the league page a few minutes early:\nhttps://
+ fantasy.espn.com/hockey/league?leagueId=450310880\n\nCan't make it? ESPN a
+ uto-drafts for you from your pre-draft rankings.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Draft starts in 30 minutes
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

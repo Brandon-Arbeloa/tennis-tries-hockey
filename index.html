@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tennis Tries Hockey · Draft Night</title>
+<meta name="description" content="Fantasy NHL draft night: Sunday, Sept 27 at 7:30 PM Central, live on ESPN. Tap to add it to your calendar.">
+<meta property="og:title" content="Tennis Tries Hockey · Draft Night">
+<meta property="og:description" content="Sunday, Sept 27 · 7:30 PM Central · Live on ESPN Fantasy. Tap to add it to your calendar.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#03061a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,700;1,900&display=swap">
+<style>
+/* ===== Theme tokens ===== */
+:root{
+  color-scheme:dark;
+  --dt-bg-deep:#03061a; --dt-bg-surface:#080f22;
+  --dt-bg-card:rgba(8,14,32,.92); --dt-bg-glass:rgba(15,30,68,.45);
+  --dt-neon-cyan:#00d9ff; --dt-neon-pink:#ff2dac; --dt-neon-green:#00ffb3;
+  --dt-neon-amber:#ffb830; --dt-neon-purple:#b66dff; --dt-neon-orange:#ff6d3b;
+  --dt-text-primary:#eaf6ff; --dt-text-dim:rgba(190,220,255,.7); --dt-text-muted:rgba(130,170,220,.55);
+  --dt-border-dim:rgba(0,217,255,.22); --dt-border-glow:rgba(0,217,255,.7);
+  --dt-rainbow-border:linear-gradient(130deg,#ff2dac 0%,#b66dff 25%,#00d9ff 50%,#00ffb3 72%,#ffb830 100%);
+  --dt-title-gradient:linear-gradient(110deg,#ffffff 0%,#00d9ff 35%,#ff2dac 65%,#b66dff 100%);
+  --dt-font-display:'Rajdhani','Arial Narrow',sans-serif;
+  --dt-font-body:'Exo 2',system-ui,sans-serif;
+  --dt-font-mono:'Share Tech Mono',ui-monospace,Menlo,monospace;
+  --dt-radius-card:8px; --dt-radius-pill:3px;
+  --dt-shadow-card-glow:0 0 22px rgba(0,217,255,.15),0 0 38px rgba(255,45,172,.08),inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.4);
+  --dt-shadow-card-glow-hover:0 0 28px rgba(0,217,255,.25),0 0 46px rgba(255,45,172,.14),inset 0 1px 0 rgba(255,255,255,.11),inset 0 -1px 0 rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{
+  background:
+    radial-gradient(ellipse 1200px 800px at 50% 0%,rgba(30,50,110,.25),transparent 60%),
+    radial-gradient(ellipse 900px 600px at 50% 100%,rgba(30,50,110,.15),transparent 60%),
+    var(--dt-bg-deep);
+  color:var(--dt-text-primary);font-family:var(--dt-font-body);font-size:15px;line-height:1.55;
+  padding-inline:16px;padding-block:0 56px;overflow-x:hidden;position:relative;min-height:100%;
+}
+/* scanlines + grid + grain */
+body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,195,255,.012) 2px,rgba(0,195,255,.012) 4px);pointer-events:none;z-index:50}
+body::after{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(0,195,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,195,255,.07) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 30%,transparent 90%);mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 30%,transparent 90%)}
+.dt-noise{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.04;mix-blend-mode:overlay;background-size:200px 200px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1   0 0 0 0 1   0 0 0 0 1   0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto}
+a{color:var(--dt-neon-cyan)}
+:focus-visible{outline:2px solid var(--dt-neon-cyan);outline-offset:3px}
+
+@keyframes dt-title-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes dt-blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes dt-draw-line{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}
+@keyframes orb-breathe{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
+@keyframes orb-spin{to{transform:rotate(360deg)}}
+
+/* ===== Header ===== */
+.dt-dash-header{padding:28px 0 26px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  border-bottom:1px solid transparent;border-image:linear-gradient(90deg,transparent 0%,rgba(0,217,255,.6) 20%,rgba(255,45,172,.6) 50%,rgba(182,109,255,.6) 80%,transparent 100%) 1;position:relative;margin-bottom:28px}
+.dt-dash-header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,rgba(0,217,255,.3) 20%,rgba(255,45,172,.3) 50%,rgba(182,109,255,.3) 80%,transparent);filter:blur(6px);pointer-events:none}
+.lockup{display:flex;align-items:center;gap:14px}
+.lockup svg{width:58px;height:58px;flex:none;overflow:visible}
+.lockup .word{display:grid;line-height:1}
+.lockup .word b{font-family:var(--dt-font-display);font-weight:600;font-size:20px;letter-spacing:.22em;background:linear-gradient(90deg,#00d4ff,#7b2fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lockup .word span{font-family:var(--dt-font-mono);font-weight:400;font-size:10px;letter-spacing:.34em;margin-top:6px;background:linear-gradient(90deg,#00d4ff,#7b2fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.header-meta{display:grid;justify-items:end;gap:6px}
+.dt-meta-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(0,255,179,.10));border:1px solid rgba(0,217,255,.4);border-radius:var(--dt-radius-pill);font-family:var(--dt-font-mono);font-size:11px;color:var(--dt-neon-cyan);letter-spacing:.12em;box-shadow:0 0 14px rgba(0,217,255,.18);text-shadow:0 0 8px rgba(0,217,255,.5)}
+.dt-meta-badge::before{content:"●";font-size:8px;animation:dt-blink 2s ease-in-out infinite}
+.dt-meta-rows{font-family:var(--dt-font-mono);font-size:10px;color:var(--dt-text-muted);letter-spacing:.1em;text-align:right}
+@media (max-width:640px){.header-meta{justify-items:start}.dt-meta-rows{text-align:left}}
+
+/* ===== Hero ===== */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:center;margin-bottom:28px}
+@media (max-width:860px){.hero{grid-template-columns:1fr}.hero-orb{display:none}}
+.dt-dash-eyebrow{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.3em;color:var(--dt-neon-cyan);text-transform:uppercase;opacity:.9;text-shadow:0 0 10px rgba(0,217,255,.35)}
+.dt-dash-title{font-family:var(--dt-font-display);font-size:clamp(46px,8.4vw,92px);font-weight:700;letter-spacing:.03em;text-transform:uppercase;line-height:.92;margin:10px 0 0;text-wrap:balance;
+  background:var(--dt-title-gradient);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  animation:dt-title-shimmer 8s ease-in-out infinite;filter:drop-shadow(0 0 22px rgba(0,217,255,.22))}
+.hero p{max-width:60ch;color:var(--dt-text-dim);font-size:16px;margin:16px 0 0}
+.hero-orb{position:relative;aspect-ratio:1;max-width:100%}
+.hero-orb svg{width:100%;height:100%;overflow:visible}
+.hero-orb .breathe{transform-origin:160px 160px;animation:orb-breathe 6s ease-in-out infinite}
+.hero-orb .spin{transform-origin:160px 160px;animation:orb-spin 60s linear infinite}
+
+/* ===== Signature card ===== */
+.dt-card{background-image:linear-gradient(var(--dt-bg-card),var(--dt-bg-card)),var(--dt-rainbow-border);background-origin:border-box;background-clip:padding-box,border-box;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid transparent;border-radius:var(--dt-radius-card);position:relative;box-shadow:var(--dt-shadow-card-glow);
+  --dt-rx:0deg;--dt-ry:0deg;--dt-lift:0px;transform:translateY(var(--dt-lift)) rotateX(var(--dt-rx)) rotateY(var(--dt-ry));transition:transform 100ms cubic-bezier(.22,.8,.36,1),box-shadow .3s}
+.dt-card.tilt:hover{--dt-lift:-2px;box-shadow:var(--dt-shadow-card-glow-hover)}
+.persp{perspective:1200px}
+
+/* KPIs */
+.dt-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:8px}
+@media (max-width:1000px){.dt-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.dt-kpi-grid{grid-template-columns:1fr}}
+.dt-kpi-card{padding:20px 18px 18px;text-align:center}
+.dt-kpi-label{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.22em;color:var(--dt-text-muted);text-transform:uppercase;margin-bottom:12px}
+.dt-kpi-value{font-family:var(--dt-font-display);font-size:44px;font-weight:700;line-height:1;color:var(--acc,var(--dt-neon-cyan));font-variant-numeric:tabular-nums;
+  text-shadow:0 0 12px color-mix(in srgb,var(--acc,var(--dt-neon-cyan)) 50%,transparent),0 0 28px color-mix(in srgb,var(--acc,var(--dt-neon-cyan)) 22%,transparent)}
+.dt-kpi-unit{font-family:var(--dt-font-mono);font-size:13px;color:var(--dt-text-dim);margin-left:3px}
+.dt-kpi-sub{font-size:12px;color:var(--dt-text-muted);margin-top:8px}
+
+/* Section label */
+.dt-section-label{margin:40px 0 6px;display:flex;align-items:center;gap:12px}
+.dt-section-label-text{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.25em;color:var(--dt-neon-cyan);text-transform:uppercase;white-space:nowrap;text-shadow:0 0 10px rgba(0,217,255,.4)}
+.dt-section-label-line{flex:1;height:1px;background:linear-gradient(90deg,var(--dt-border-glow),transparent);transform-origin:left;animation:dt-draw-line 700ms cubic-bezier(.22,.8,.36,1) both .2s}
+.dt-section-sub{font-size:13px;color:var(--dt-text-muted);margin:0 0 16px}
+h2.sec{font-family:var(--dt-font-display);font-weight:700;font-size:clamp(28px,4.4vw,40px);letter-spacing:.04em;text-transform:uppercase;margin:0 0 4px;line-height:1}
+
+/* ===== Poll ===== */
+.step{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dt-text-muted);margin:18px 0 10px}
+.step b{color:var(--dt-neon-pink);font-weight:400}
+.who{display:flex;flex-wrap:wrap;gap:8px}
+.who button{font:600 14px var(--dt-font-body);color:var(--dt-text-primary);background:var(--dt-bg-glass);border:1px solid var(--dt-border-dim);border-radius:var(--dt-radius-pill);padding:6px 12px 6px 6px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.who button:hover{border-color:rgba(0,217,255,.5)}
+.who button[aria-pressed="true"]{border-color:var(--dt-neon-cyan);box-shadow:0 0 0 1px var(--dt-neon-cyan),0 0 18px rgba(0,217,255,.35)}
+.who .done{font-family:var(--dt-font-mono);font-size:10px;color:var(--dt-neon-green);letter-spacing:.08em}
+.mini{width:27px;height:26px;flex:none;display:block;filter:drop-shadow(0 0 4px rgba(0,0,0,.6))}
+.slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:820px){.slots{grid-template-columns:1fr}}
+.slot{text-align:left;font:inherit;color:var(--dt-text-primary);padding:20px 20px 18px;display:grid;gap:10px;cursor:pointer;width:100%}
+.slot:disabled{cursor:default}
+.slot.on{box-shadow:0 0 0 1px var(--dt-neon-cyan),0 0 30px rgba(0,217,255,.35),0 0 60px rgba(255,45,172,.15)}
+.slot-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.slot .day{font-family:var(--dt-font-display);font-weight:700;font-size:30px;line-height:1;text-transform:uppercase;letter-spacing:.03em}
+.slot .when{font-family:var(--dt-font-mono);font-size:14px;color:var(--dt-neon-cyan);letter-spacing:.06em}
+.slot .tz{font-family:var(--dt-font-mono);font-size:11px;color:var(--dt-text-muted);letter-spacing:.04em}
+.check{width:26px;height:26px;border-radius:var(--dt-radius-pill);border:1px solid var(--dt-border-dim);display:grid;place-items:center;flex:none;color:#03061a;font-weight:700}
+.slot.on .check{background:var(--dt-neon-cyan);border-color:var(--dt-neon-cyan);box-shadow:0 0 12px rgba(0,217,255,.6)}
+.tally{display:flex;align-items:baseline;gap:6px}
+.tally .n{font-family:var(--dt-font-display);font-weight:700;font-size:40px;line-height:1;color:var(--dt-neon-pink);text-shadow:0 0 12px rgba(255,45,172,.5);font-variant-numeric:tabular-nums}
+.tally .of{font-family:var(--dt-font-mono);font-size:12px;color:var(--dt-text-muted);letter-spacing:.08em}
+.bar{height:4px;background:rgba(0,217,255,.1);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--dt-neon-cyan),var(--dt-neon-pink));box-shadow:0 0 10px rgba(0,217,255,.6);transition:width .5s}
+.voters{display:flex;flex-wrap:wrap;gap:4px;min-height:26px}
+.lead-tag{display:none;font-family:var(--dt-font-mono);font-size:10px;letter-spacing:.15em;color:#03061a;background:var(--dt-neon-green);padding:3px 8px;border-radius:var(--dt-radius-pill);box-shadow:0 0 12px rgba(0,255,179,.5);justify-self:start}
+.slot.lead .lead-tag{display:inline-block}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:18px}
+.btn{font:600 14px var(--dt-font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dt-neon-cyan);background:linear-gradient(135deg,rgba(0,217,255,.18),rgba(182,109,255,.18));border:1px solid var(--dt-neon-cyan);border-radius:var(--dt-radius-pill);padding:12px 22px;cursor:pointer;box-shadow:0 0 16px rgba(0,217,255,.25);text-shadow:0 0 8px rgba(0,217,255,.5)}
+.btn:hover:not(:disabled){box-shadow:0 0 26px rgba(0,217,255,.45)}
+.btn:disabled{opacity:.35;cursor:default}
+.status{font-size:13px;color:var(--dt-text-dim)}
+.notice{margin-top:14px;font-size:13px;color:var(--dt-text-dim);border-left:2px solid var(--dt-neon-amber);padding:4px 0 4px 12px}
+
+/* ===== Roster table ===== */
+.table-card{padding:8px 8px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+thead th{font-family:var(--dt-font-mono);font-weight:400;font-size:10px;letter-spacing:.2em;color:var(--dt-neon-cyan);text-transform:uppercase;padding:14px;border-bottom:1px solid rgba(0,217,255,.25);text-align:left;white-space:nowrap;text-shadow:0 0 10px rgba(0,217,255,.35)}
+tbody tr{border-bottom:1px solid rgba(0,195,255,.06);--dt-x:50%;transition:background .15s,box-shadow .15s}
+tbody tr:last-child{border-bottom:0}
+tbody tr:hover{background:radial-gradient(circle at var(--dt-x) 50%,rgba(0,217,255,.18) 0%,rgba(255,45,172,.10) 25%,rgba(0,217,255,.04) 50%,transparent 80%);box-shadow:inset 3px 0 0 var(--dt-neon-cyan)}
+tbody td{padding:12px 14px;color:var(--dt-text-dim);font-size:14px;vertical-align:middle}
+td.num{font-family:var(--dt-font-mono);color:var(--dt-text-muted);width:44px}
+td.abbr{font-family:var(--dt-font-mono);color:var(--dt-text-primary);letter-spacing:.1em}
+.team{display:flex;align-items:center;gap:10px;color:var(--dt-text-primary);font-weight:600}
+.pill{font-family:var(--dt-font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;border-radius:var(--dt-radius-pill);border:1px solid}
+.pill.east{color:var(--dt-neon-cyan);border-color:rgba(0,217,255,.5);background:rgba(0,217,255,.08);text-shadow:0 0 8px rgba(0,217,255,.5)}
+.pill.west{color:var(--dt-neon-pink);border-color:rgba(255,45,172,.5);background:rgba(255,45,172,.08);text-shadow:0 0 8px rgba(255,45,172,.5)}
+.gm{font-family:var(--dt-font-mono);font-size:10px;letter-spacing:.14em;color:var(--dt-neon-amber);margin-left:8px;text-shadow:0 0 8px rgba(255,184,48,.5)}
+
+/* ===== Prize ===== */
+.prize{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.35fr);gap:28px;align-items:center;padding:30px;overflow:hidden}
+@media (max-width:860px){.prize{grid-template-columns:1fr;padding:22px}}
+.prize h3{font-family:var(--dt-font-display);font-weight:700;font-size:clamp(30px,4.6vw,46px);line-height:.95;text-transform:uppercase;letter-spacing:.03em;margin:8px 0 0;text-wrap:balance}
+.prize h3 em{font-style:normal;background:linear-gradient(90deg,var(--dt-neon-amber),var(--dt-neon-orange),var(--dt-neon-pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.prize p{color:var(--dt-text-dim);margin:14px 0 0;max-width:52ch}
+.specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin-top:20px;background:rgba(0,217,255,.14);border:1px solid rgba(0,217,255,.14);border-radius:var(--dt-radius-sm,4px);overflow:hidden}
+.specs div{background:rgba(3,6,26,.85);padding:10px 12px;display:grid;gap:2px}
+.specs span{font-family:var(--dt-font-mono);font-size:10px;letter-spacing:.18em;color:var(--dt-text-muted);text-transform:uppercase}
+.specs b{font-family:var(--dt-font-display);font-weight:600;font-size:18px;letter-spacing:.03em}
+.jerseys{display:grid;grid-template-columns:1fr 1fr;gap:4px;position:relative;padding-bottom:18px}
+.jerseys::after{content:"";position:absolute;left:8%;right:8%;bottom:14px;height:30px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,217,255,.45),rgba(139,92,255,.25) 40%,rgba(255,45,172,.12) 60%,transparent 74%);filter:blur(10px);z-index:0}
+.jerseys figure:first-child{transform:rotate(-3deg) translateY(4px)}
+.jerseys figure:last-child{transform:rotate(3deg) translateY(4px)}
+.sweep{animation:sweep 7s cubic-bezier(.45,0,.2,1) infinite}
+.sweep.s2{animation-delay:.35s}
+.twk{animation:twk 3.2s ease-in-out infinite;opacity:.15;transform-box:fill-box;transform-origin:center}
+@keyframes twk{0%,100%{opacity:.1}45%{opacity:1}55%{opacity:.9}}
+@keyframes sweep{0%{transform:translateX(0)}55%,100%{transform:translateX(640px)}}
+.jerseys::before{content:"";position:absolute;inset:0 4% 10%;background:radial-gradient(circle at 50% 45%,rgba(0,217,255,.22),rgba(139,92,255,.18) 38%,rgba(255,45,172,.08) 58%,transparent 72%);filter:blur(26px);z-index:0}
+.jerseys figure{margin:0;position:relative;z-index:1;display:grid;gap:6px;justify-items:center}
+.jerseys svg{width:100%;height:auto;max-width:360px;overflow:visible;filter:drop-shadow(0 22px 26px rgba(0,0,0,.6))}
+.jerseys figcaption{font-family:var(--dt-font-mono);font-size:10px;letter-spacing:.24em;color:var(--dt-text-muted);text-transform:uppercase}
+
+/* ===== Timeline ===== */
+.timeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(0,217,255,.35);margin-top:10px}
+.timeline div{padding:18px 16px 0 0;position:relative;display:grid;gap:4px}
+.timeline div::before{content:"";position:absolute;top:-6px;left:0;width:11px;height:11px;transform:rotate(45deg);background:var(--dt-bg-deep);border:1px solid var(--dt-neon-purple);box-shadow:0 0 10px rgba(182,109,255,.5)}
+.timeline div.hot::before{background:var(--dt-neon-cyan);border-color:var(--dt-neon-cyan);box-shadow:0 0 14px rgba(0,217,255,.8)}
+.timeline div.end::before{background:var(--dt-neon-pink);border-color:var(--dt-neon-pink);box-shadow:0 0 14px rgba(255,45,172,.8)}
+.timeline b{font-family:var(--dt-font-mono);font-weight:400;font-size:13px;color:var(--dt-neon-cyan);letter-spacing:.06em}
+.timeline span{font-size:14px;color:var(--dt-text-dim)}
+@media (max-width:640px){.timeline{grid-template-columns:1fr 1fr;row-gap:24px}}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14);font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.1em;color:var(--dt-text-muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+
+
+/* ===== Announcement ===== */
+.announce{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:0;margin-bottom:22px;overflow:hidden}
+.a-cell{padding:20px 24px;display:grid;gap:4px;border-right:1px solid rgba(0,217,255,.14)}
+.a-cell span{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--dt-text-muted)}
+.a-cell b{font-family:var(--dt-font-display);font-weight:700;font-size:clamp(34px,5.4vw,58px);line-height:1;text-transform:uppercase;letter-spacing:.02em}
+.a-cell.hot{border-right:0;background:linear-gradient(120deg,rgba(255,45,172,.14),rgba(139,92,255,.12) 50%,rgba(0,217,255,.12))}
+.a-cell.hot b{background:linear-gradient(100deg,#fff,#00d9ff 40%,#ff2dac 80%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px rgba(255,45,172,.35))}
+.a-cell.hot b i{font-style:normal;font-size:.5em;letter-spacing:.1em}
+.a-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;padding:12px 24px;border-top:1px solid rgba(0,217,255,.14);font-family:var(--dt-font-mono);font-size:12px;letter-spacing:.1em;color:var(--dt-text-dim)}
+.a-foot .cd b{color:var(--dt-neon-green);font-weight:400;text-shadow:0 0 10px rgba(0,255,179,.5);margin-left:6px}
+@media (max-width:760px){.announce{grid-template-columns:1fr 1fr}.a-cell.hot{grid-column:1/-1;border-top:1px solid rgba(0,217,255,.14)}.a-cell:nth-child(2){border-right:0}}
+
+.a-cal{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 24px 18px;border-top:1px solid rgba(0,217,255,.14)}
+.a-cal-label{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--dt-neon-pink);text-shadow:0 0 10px rgba(255,45,172,.45);margin-right:6px}
+.calbtn{display:inline-grid;gap:1px;text-decoration:none;font:600 14px var(--dt-font-body);color:var(--dt-text-primary);background:linear-gradient(135deg,rgba(0,217,255,.12),rgba(139,92,255,.14));border:1px solid rgba(0,217,255,.45);border-radius:var(--dt-radius-pill);padding:8px 14px;cursor:pointer;box-shadow:0 0 12px rgba(0,217,255,.15);transition:box-shadow .15s,border-color .15s;text-align:left}
+.calbtn small{font:400 10px var(--dt-font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dt-text-muted)}
+.calbtn:hover{border-color:var(--dt-neon-pink);box-shadow:0 0 20px rgba(255,45,172,.35)}
+.calbtn.copy{border-style:dashed}
+
+/* ===== Calendar prompt ===== */
+.cal-modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px}
+.cal-backdrop{position:absolute;inset:0;background:rgba(3,6,26,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:calfade .25s ease both}
+.cal-panel{position:relative;width:min(440px,100%);padding:28px 26px 22px;display:grid;gap:12px;text-align:center;animation:calpop .35s cubic-bezier(.22,.8,.36,1) both;box-shadow:0 0 40px rgba(0,217,255,.25),0 0 80px rgba(255,45,172,.18)}
+.cal-panel h2{margin:0;font-family:var(--dt-font-display);font-weight:700;font-size:32px;line-height:1;text-transform:uppercase;letter-spacing:.03em;text-wrap:balance}
+.cal-when{margin:0;font-size:16px;color:var(--dt-text-primary)}
+.cal-when b{color:var(--dt-neon-cyan);text-shadow:0 0 10px rgba(0,217,255,.5)}
+.cal-when span{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.08em;color:var(--dt-text-muted)}
+.cal-primary{display:block;margin-top:6px;padding:14px 18px;border-radius:var(--dt-radius-pill);text-decoration:none;font:700 16px var(--dt-font-body);letter-spacing:.04em;color:#fff;background:linear-gradient(100deg,#ff2dac,#8b5cff 55%,#00b8ff);box-shadow:0 0 22px rgba(255,45,172,.45),0 0 40px rgba(0,217,255,.2)}
+.cal-primary:hover{filter:brightness(1.1)}
+.cal-hint{margin:0;font-size:12px;color:var(--dt-text-dim)}
+.cal-hint b{color:var(--dt-neon-cyan);font-weight:600}
+.cal-or{margin:4px 0 0;font-family:var(--dt-font-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dt-text-muted)}
+.cal-alt{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.cal-alt a{font:600 13px var(--dt-font-body);color:var(--dt-text-primary);text-decoration:none;border:1px solid rgba(0,217,255,.4);border-radius:var(--dt-radius-pill);padding:7px 12px;background:rgba(0,217,255,.06)}
+.cal-alt a:hover{border-color:var(--dt-neon-pink)}
+.cal-later{justify-self:center;background:none;border:0;color:var(--dt-text-muted);font:500 13px var(--dt-font-body);cursor:pointer;padding:6px 10px;text-decoration:underline;text-underline-offset:3px}
+.cal-x{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--dt-text-dim);font-size:24px;line-height:1;cursor:pointer;padding:4px 8px}
+@keyframes calfade{from{opacity:0}to{opacity:1}}
+@keyframes calpop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+/* ===== Info cards ===== */
+.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.info-grid{grid-template-columns:1fr}}
+.info{padding:22px 24px;display:grid;gap:14px;align-content:start}
+.info h3{margin:0;font-family:var(--dt-font-display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.04em}
+.info ul{list-style:none;margin:0;padding:0;display:grid}
+.info li{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid rgba(0,195,255,.08);font-size:14px}
+.info li:last-child{border-bottom:0}
+.info li b{font-family:var(--dt-font-mono);font-weight:400;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dt-neon-cyan);padding-top:2px}
+.info li span{color:var(--dt-text-dim)}
+.info ol{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:10px}
+.info ol li{display:flex;gap:12px;grid-template-columns:none;border:0;padding:0;color:var(--dt-text-dim);counter-increment:s}
+.info ol li::before{content:counter(s);flex:none;width:24px;height:24px;display:grid;place-items:center;font-family:var(--dt-font-mono);font-size:12px;color:#03061a;background:var(--dt-neon-pink);border-radius:var(--dt-radius-pill);box-shadow:0 0 10px rgba(255,45,172,.5)}
+.info .btn{justify-self:start;text-decoration:none}
+/* ===== Slate ===== */
+.slate{margin-top:28px;padding:18px 22px}
+.slate-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-bottom:8px}
+.slate-date{font-family:var(--dt-font-mono);font-size:11px;letter-spacing:.14em;color:var(--dt-text-muted);text-transform:uppercase}
+.games{display:grid}
+.game{display:grid;grid-template-columns:90px 160px 1fr auto;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid rgba(0,195,255,.08)}
+.game:last-child{border-bottom:0}
+.game .t{font-family:var(--dt-font-mono);font-size:13px;color:var(--dt-neon-cyan);font-variant-numeric:tabular-nums}
+.game .m{white-space:nowrap;font-family:var(--dt-font-display);font-weight:700;font-size:22px;letter-spacing:.06em}
+.game .m em{font-style:normal;color:var(--dt-neon-pink);padding:0 2px}
+.game .n{font-size:13px;color:var(--dt-text-muted)}
+.game .tv{font-family:var(--dt-font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dt-text-dim);border:1px solid var(--dt-border-dim);padding:2px 8px;border-radius:var(--dt-radius-pill)}
+@media (max-width:560px){.game{grid-template-columns:72px 1fr auto}.game .n{display:none}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .dt-card{transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="dt-noise" aria-hidden="true"></div>
+
+<!-- Shared SVG defs: league crest + jersey parts -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="pN" x1="50%" y1="100%" x2="50%" y2="0%"><stop offset="0" stop-color="#7b2fff" stop-opacity=".75"/><stop offset=".4" stop-color="#00d4ff" stop-opacity=".95"/><stop offset="1" stop-color="#00ffff"/></linearGradient>
+    <linearGradient id="pS" x1="50%" y1="0%" x2="50%" y2="100%"><stop offset="0" stop-color="#7b2fff" stop-opacity=".55"/><stop offset=".6" stop-color="#9b3fff" stop-opacity=".35"/><stop offset="1" stop-color="#ff2d95" stop-opacity=".2"/></linearGradient>
+    <linearGradient id="pE" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="0" stop-color="#7b2fff" stop-opacity=".65"/><stop offset="1" stop-color="#00d4ff" stop-opacity=".9"/></linearGradient>
+    <linearGradient id="pW" x1="100%" y1="50%" x2="0%" y2="50%"><stop offset="0" stop-color="#7b2fff" stop-opacity=".65"/><stop offset="1" stop-color="#00d4ff" stop-opacity=".9"/></linearGradient>
+    <linearGradient id="pD" x1="100%" y1="100%" x2="0%" y2="0%"><stop offset="0" stop-color="#7b2fff" stop-opacity=".4"/><stop offset="1" stop-color="#00d4ff" stop-opacity=".65"/></linearGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0" stop-color="#00d4ff"/><stop offset="1" stop-color="#7b2fff"/></linearGradient>
+    <radialGradient id="core" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#00d4ff" stop-opacity=".5"/><stop offset=".2" stop-color="#00d4ff" stop-opacity=".3"/><stop offset=".4" stop-color="#7b2fff" stop-opacity=".18"/><stop offset=".6" stop-color="#ff2d95" stop-opacity=".1"/><stop offset=".8" stop-color="#ff6b2d" stop-opacity=".05"/><stop offset="1" stop-color="#0a0a0f" stop-opacity="0"/></radialGradient>
+    <filter id="mega" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="8" result="a"/><feGaussianBlur stdDeviation="4" result="b"/><feGaussianBlur stdDeviation="2" result="c"/><feMerge><feMergeNode in="a"/><feMergeNode in="b"/><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="mid" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="a"/><feMerge><feMergeNode in="a"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="a"/><feMerge><feMergeNode in="a"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="spark" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="6" result="a"/><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="a"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+
+
+
+    <!-- Jersey geometry (viewBox 0 0 360 340) -->
+    <path id="j-body" d="M150 21 Q180 44 210 21 L242 30 L256 120 L262 318 Q180 332 98 318 L104 120 L118 30 Z"/>
+    <path id="j-slvL" d="M118 30 L104 120 L64 286 L14 262 C34 110 70 44 118 30 Z"/>
+    <path id="j-slvR" d="M242 30 L256 120 L296 286 L346 262 C326 110 290 44 242 30 Z"/>
+    <path id="j-all" d="M150 21 Q180 44 210 21 L242 30 C290 44 326 110 346 262 L296 286 L256 120 L262 318 Q180 332 98 318 L104 120 L64 286 L14 262 C34 110 70 44 118 30 Z"/>
+    <clipPath id="c-body"><use href="#j-body"/></clipPath>
+    <clipPath id="c-slvL"><use href="#j-slvL"/></clipPath>
+    <clipPath id="c-slvR"><use href="#j-slvR"/></clipPath>
+    <linearGradient id="j-base" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#15151c"/><stop offset=".55" stop-color="#0a0a0f"/><stop offset="1" stop-color="#050507"/></linearGradient>
+    <linearGradient id="j-shade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity=".6"/><stop offset=".2" stop-color="#000" stop-opacity=".05"/>
+      <stop offset=".44" stop-color="#fff" stop-opacity=".07"/><stop offset=".6" stop-color="#fff" stop-opacity=".02"/>
+      <stop offset=".8" stop-color="#000" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".6"/>
+    </linearGradient>
+    <pattern id="j-mesh" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".55" fill="#000" opacity=".35"/><circle cx="3" cy="3" r=".45" fill="#fff" opacity=".03"/></pattern>
+    <pattern id="j-sparkle" width="48" height="48" patternUnits="userSpaceOnUse"><circle cx="15.5" cy="7.2" r="0.35" fill="#d9c2ff" opacity="0.25"/><circle cx="4.5" cy="28.0" r="0.9" fill="#ffffff" opacity="0.35"/><circle cx="4.1" cy="20.1" r="0.45" fill="#d9c2ff" opacity="0.25"/><circle cx="20.4" cy="39.7" r="0.35" fill="#d9c2ff" opacity="0.35"/><circle cx="45.5" cy="27.7" r="0.7" fill="#ffffff" opacity="0.25"/><circle cx="2.2" cy="41.2" r="0.55" fill="#ffffff" opacity="0.7"/><circle cx="26.0" cy="27.4" r="0.9" fill="#ffffff" opacity="0.35"/><circle cx="27.9" cy="30.7" r="0.55" fill="#d9c2ff" opacity="0.25"/><circle cx="34.2" cy="27.1" r="0.9" fill="#ffc2e8" opacity="0.35"/><circle cx="32.7" cy="20.5" r="0.55" fill="#d9c2ff" opacity="0.7"/><circle cx="44.3" cy="17.4" r="0.45" fill="#ffffff" opacity="0.35"/><circle cx="3.9" cy="14.4" r="0.7" fill="#ffc2e8" opacity="0.5"/><circle cx="13.8" cy="47.0" r="0.35" fill="#ffc2e8" opacity="0.9"/><circle cx="7.9" cy="16.4" r="0.7" fill="#ffffff" opacity="0.7"/><circle cx="46.2" cy="3.7" r="0.9" fill="#bfefff" opacity="0.9"/><circle cx="16.3" cy="16.8" r="0.7" fill="#ffc2e8" opacity="0.9"/><circle cx="3.3" cy="4.5" r="0.55" fill="#ffffff" opacity="0.7"/><circle cx="2.9" cy="33.7" r="0.9" fill="#bfefff" opacity="0.7"/><circle cx="34.4" cy="42.6" r="0.55" fill="#ffc2e8" opacity="0.25"/><circle cx="17.1" cy="29.3" r="0.7" fill="#ffffff" opacity="0.25"/><circle cx="36.9" cy="6.2" r="0.45" fill="#ffc2e8" opacity="0.7"/><circle cx="44.0" cy="23.8" r="0.45" fill="#ffc2e8" opacity="0.7"/><circle cx="26.4" cy="42.4" r="0.7" fill="#bfefff" opacity="0.9"/><circle cx="33.9" cy="47.4" r="0.7" fill="#ffffff" opacity="0.35"/><circle cx="4.0" cy="7.3" r="0.45" fill="#ffc2e8" opacity="0.25"/><circle cx="39.9" cy="8.8" r="0.55" fill="#ffffff" opacity="0.25"/></pattern>
+    <filter id="neon" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="bloom" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="haze" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="twglow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff2dac"/><stop offset=".5" stop-color="#8b5cff"/><stop offset="1" stop-color="#00d9ff"/></linearGradient>
+    <linearGradient id="holo" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff2dac"/><stop offset=".35" stop-color="#b66dff"/><stop offset=".7" stop-color="#3d7bff"/><stop offset="1" stop-color="#00e1ff"/></linearGradient>
+    <linearGradient id="holoS" gradientUnits="userSpaceOnUse" x1="-80" y1="0" x2="80" y2="0"><stop offset="0" stop-color="#ff2dac"/><stop offset=".35" stop-color="#b66dff"/><stop offset=".7" stop-color="#3d7bff"/><stop offset="1" stop-color="#00e1ff"/></linearGradient>
+    <linearGradient id="holoN" gradientUnits="userSpaceOnUse" x1="150" y1="0" x2="210" y2="0"><stop offset="0" stop-color="#ff2dac"/><stop offset=".5" stop-color="#b66dff"/><stop offset="1" stop-color="#00e1ff"/></linearGradient>
+    <linearGradient id="sweepG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".14"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <path id="glint" d="M0 -7 L1.2 -1.2 L7 0 L1.2 1.2 L0 7 L-1.2 1.2 L-7 0 L-1.2 -1.2 Z"/>
+    <!-- neon stripe set: cyan tube / holo band / pink tube -->
+    <g id="stripeset" filter="url(#neon)">
+      <rect x="-200" y="-22" width="400" height="3.5" fill="#00e1ff"/>
+      <rect x="-200" y="-11" width="400" height="22" fill="url(#holoS)"/>
+      <rect x="-200" y="18.5" width="400" height="3.5" fill="#ff2dac"/>
+    </g>
+<g id="mark">
+      <circle cx="160" cy="160" r="130" fill="none" stroke="url(#ring)" stroke-width="1.5" opacity=".5" filter="url(#soft)"/>
+      <circle cx="160" cy="160" r="98" fill="none" stroke="url(#ring)" stroke-width="2" opacity=".6" filter="url(#soft)"/>
+      <circle cx="160" cy="160" r="55" fill="none" stroke="url(#ring)" stroke-width="2.5" opacity=".75" filter="url(#soft)"/>
+      <g filter="url(#mid)" opacity=".55">
+        <path d="M245 75 L185 135 L177 143 L193 127 Z" fill="url(#pD)"/><path d="M75 75 L135 135 L143 143 L127 127 Z" fill="url(#pD)"/>
+        <path d="M245 245 L185 185 L193 177 L177 193 Z" fill="url(#pD)"/><path d="M75 245 L135 185 L127 177 L143 193 Z" fill="url(#pD)"/>
+      </g>
+      <g filter="url(#mega)">
+        <path d="M160 18 L173 118 L160 150 L147 118 Z" fill="url(#pN)"/><path d="M160 302 L173 202 L160 170 L147 202 Z" fill="url(#pS)"/>
+        <path d="M302 160 L202 147 L170 160 L202 173 Z" fill="url(#pE)"/><path d="M18 160 L118 147 L150 160 L118 173 Z" fill="url(#pW)"/>
+      </g>
+      <g filter="url(#mid)">
+        <circle cx="160" cy="160" r="30" fill="#0a0a0f" stroke="url(#ring)" stroke-width="3"/>
+        <circle cx="160" cy="160" r="20" fill="none" stroke="url(#ring)" stroke-width="2" opacity=".6"/>
+        <circle cx="160" cy="160" r="10" fill="url(#ring)"/>
+      </g>
+    </g>
+    <g id="sparkles">
+      <circle cx="160" cy="14" r="7" fill="#00ffff" filter="url(#spark)"/><circle cx="73" cy="73" r="5" fill="#00d4ff" filter="url(#spark)"/>
+      <circle cx="120" cy="35" r="3" fill="#00d4ff" opacity=".8" filter="url(#spark)"/><circle cx="200" cy="35" r="3" fill="#00d4ff" opacity=".8" filter="url(#spark)"/>
+      <circle cx="306" cy="160" r="6" fill="#00d4ff" filter="url(#spark)"/><circle cx="247" cy="73" r="5" fill="#00d4ff" filter="url(#spark)"/>
+      <circle cx="14" cy="160" r="5" fill="#ff2d95" filter="url(#spark)"/><circle cx="247" cy="247" r="4" fill="#ff2d95" opacity=".8" filter="url(#spark)"/>
+      <circle cx="285" cy="120" r="2.5" fill="#ff2d95" opacity=".6" filter="url(#spark)"/><circle cx="160" cy="306" r="4" fill="#ff6b2d" opacity=".75" filter="url(#spark)"/>
+      <circle cx="73" cy="247" r="4" fill="#ff6b2d" opacity=".7" filter="url(#spark)"/><circle cx="35" cy="200" r="2.5" fill="#ff6b2d" opacity=".5" filter="url(#spark)"/>
+    </g>
+    <g id="jcrest"><circle r="60" fill="#8b5cff" opacity=".28" filter="url(#haze)"/>
+      <circle r="44" fill="none" stroke="#f4f7ff" stroke-width="11"/>
+      <circle r="44" fill="none" stroke="#050507" stroke-width="6"/>
+      <circle r="44" fill="none" stroke="url(#holo)" stroke-width="3.5" filter="url(#neon)"/>
+      <path d="M0.0 -66.0 L5.7 -13.9 L22.6 -22.6 L13.9 -5.7 L56.0 0.0 L13.9 5.7 L22.6 22.6 L5.7 13.9 L0.0 66.0 L-5.7 13.9 L-22.6 22.6 L-13.9 5.7 L-56.0 0.0 L-13.9 -5.7 L-22.6 -22.6 L-5.7 -13.9 Z" fill="#f4f7ff" stroke="#f4f7ff" stroke-width="12" stroke-linejoin="miter" stroke-miterlimit="6"/>
+      <path d="M0.0 -66.0 L5.7 -13.9 L22.6 -22.6 L13.9 -5.7 L56.0 0.0 L13.9 5.7 L22.6 22.6 L5.7 13.9 L0.0 66.0 L-5.7 13.9 L-22.6 22.6 L-13.9 5.7 L-56.0 0.0 L-13.9 -5.7 L-22.6 -22.6 L-5.7 -13.9 Z" fill="#050507" stroke="#050507" stroke-width="5" stroke-linejoin="miter" stroke-miterlimit="6"/>
+      <path d="M0 0 L-5.7 -13.9 L0.0 -66.0 L5.7 -13.9 Z" fill="#00e1ff"/><path d="M0 0 L5.7 -13.9 L22.6 -22.6 L13.9 -5.7 Z" fill="#ff2dac"/><path d="M0 0 L13.9 -5.7 L56.0 0.0 L13.9 5.7 Z" fill="#a86bff"/><path d="M0 0 L13.9 5.7 L22.6 22.6 L5.7 13.9 Z" fill="#ff2dac"/><path d="M0 0 L5.7 13.9 L0.0 66.0 L-5.7 13.9 Z" fill="#00e1ff"/><path d="M0 0 L-5.7 13.9 L-22.6 22.6 L-13.9 5.7 Z" fill="#ff2dac"/><path d="M0 0 L-13.9 5.7 L-56.0 0.0 L-13.9 -5.7 Z" fill="#a86bff"/><path d="M0 0 L-13.9 -5.7 L-22.6 -22.6 L-5.7 -13.9 Z" fill="#ff2dac"/>
+      <path d="M0 0 L0.0 -66.0 L5.7 -13.9 Z" fill="#008fb0"/><path d="M0 0 L22.6 -22.6 L13.9 -5.7 Z" fill="#b30f72"/><path d="M0 0 L56.0 0.0 L13.9 5.7 Z" fill="#6a33d6"/><path d="M0 0 L22.6 22.6 L5.7 13.9 Z" fill="#b30f72"/><path d="M0 0 L0.0 66.0 L-5.7 13.9 Z" fill="#008fb0"/><path d="M0 0 L-22.6 22.6 L-13.9 5.7 Z" fill="#b30f72"/><path d="M0 0 L-56.0 0.0 L-13.9 -5.7 Z" fill="#6a33d6"/><path d="M0 0 L-22.6 -22.6 L-5.7 -13.9 Z" fill="#b30f72"/>
+      <circle r="14" fill="#050507" stroke="#f4f7ff" stroke-width="4"/>
+      <circle r="6.5" fill="#ff2dac"/>
+    </g>
+    <!-- common shell -->
+    <g id="j-shell">
+      <use href="#j-all" fill="url(#j-base)"/>
+      <use href="#j-all" fill="url(#j-sparkle)"/>
+      <g clip-path="url(#c-body)"><use href="#stripeset" transform="translate(180 272)"/></g>
+      <g clip-path="url(#c-slvL)"><use href="#stripeset" transform="translate(58 222) rotate(25.6)"/></g>
+      <g clip-path="url(#c-slvR)"><use href="#stripeset" transform="translate(302 222) rotate(-25.6)"/></g>
+      <path d="M0 62 Q180 86 360 62" fill="none" stroke="url(#rim)" stroke-width="2.5" clip-path="url(#c-all)" filter="url(#neon)"/>
+      <use href="#j-all" fill="url(#j-mesh)"/>
+      <use href="#j-all" fill="url(#j-shade)"/>
+      <g fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="1" stroke-dasharray="3 3">
+        <path d="M118 32 L105 120 L99 316"/><path d="M242 32 L255 120 L261 316"/>
+        <path d="M102 128 L66 278"/><path d="M258 128 L294 278"/>
+        <path d="M100 309 Q180 322 260 309"/>
+        <path d="M17 254 L67 278"/><path d="M343 254 L293 278"/>
+      </g>
+      <g fill="none" stroke="#000" stroke-opacity=".5" stroke-width="1.2">
+        <path d="M105 122 Q114 170 108 220"/><path d="M255 122 Q246 170 252 220"/>
+        <path d="M140 262 Q146 286 138 310"/><path d="M220 262 Q214 286 222 310"/>
+      </g>
+      <use href="#j-all" fill="none" stroke="#000" stroke-opacity=".8" stroke-width="1.5"/>
+    </g>
+    <clipPath id="c-all"><use href="#j-all"/></clipPath>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="dt-dash-header">
+    <div class="lockup" aria-label="Tennis tries Hockey">
+      <svg viewBox="0 0 320 320" aria-hidden="true"><circle cx="160" cy="160" r="155" fill="url(#core)"/><use href="#mark"/></svg>
+      <div class="word"><b>TENNIS TRIES HOCKEY</b><span>FANTASY NHL · 2026–27</span></div>
+    </div>
+    <div class="header-meta">
+      <span class="dt-meta-badge">DRAFT LOCKED IN</span>
+      <span class="dt-meta-rows">LEAGUE 450310880 · ESPN FANTASY HOCKEY<br>SUN 09.27 · 7:30 PM CT</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="dt-dash-eyebrow">Fantasy NHL · 2026–27 · Official announcement</div>
+      <h1 class="dt-dash-title">Tennis Tries Hockey<br>Draft Night</h1>
+      <p>The date is set. All seven managers draft together, live on ESPN Fantasy, Sunday night at 7:30 Central. Two days later the NHL season opens and every pick starts counting.</p>
+    </div>
+    <div class="hero-orb" aria-hidden="true">
+      <svg viewBox="0 0 320 320">
+        <g class="breathe"><circle cx="160" cy="160" r="155" fill="url(#core)"/>
+          <circle cx="160" cy="160" r="130" fill="none" stroke="#ff2d95" stroke-width="50" opacity=".035" filter="url(#mega)"/>
+          <circle cx="160" cy="160" r="115" fill="none" stroke="#ff6b2d" stroke-width="35" opacity=".025" filter="url(#mega)"/>
+          <circle cx="160" cy="160" r="100" fill="none" stroke="#00d4ff" stroke-width="25" opacity=".045" filter="url(#mega)"/>
+          <circle cx="160" cy="160" r="90" fill="none" stroke="#7b2fff" stroke-width="20" opacity=".03" filter="url(#mega)"/>
+        </g>
+        <use href="#mark"/>
+        <g class="spin"><use href="#sparkles"/></g>
+      </svg>
+    </div>
+  </section>
+
+  <div class="dt-card announce">
+    <div class="a-cell"><span>Day</span><b>Sunday</b></div>
+    <div class="a-cell"><span>Date</span><b>Sept 27</b></div>
+    <div class="a-cell hot"><span>Draft starts</span><b>7:30 PM <i>CT</i></b></div>
+    <div class="a-foot">
+      <span>8:30 PM ET · 6:30 PM MT · 5:30 PM PT</span>
+      <span class="cd">Draft starts in <b id="dCount">—</b></span>
+    </div>
+    <div class="a-cal">
+      <span class="a-cal-label">Add to calendar</span>
+      <a class="calbtn" data-cal="google" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Tennis+tries+Hockey+%C2%B7+Fantasy+Draft+Night&amp;dates=20260928T003000Z%2F20260928T023000Z&amp;details=Live+ESPN+Fantasy+Hockey+draft+for+the+Tennis+tries+Hockey+league.+All+7+managers+draft+together.%0A%0AJoin+the+draft+room+from+the+league+page+a+few+minutes+early%3A%0Ahttps%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880%0A%0ACan%27t+make+it%3F+ESPN+auto-drafts+for+you+from+your+pre-draft+rankings.&amp;location=ESPN+Fantasy+Hockey+%C2%B7+https%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880&amp;ctz=America%2FChicago" target="_blank" rel="noopener">Google <small>Gmail · Android</small></a>
+      <a class="calbtn" data-cal="apple" href="draft-night.ics" rel="noopener">Apple <small>iPhone · Mac</small></a>
+      <a class="calbtn" data-cal="outlook" href="https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&amp;rru=addevent&amp;subject=Tennis+tries+Hockey+%C2%B7+Fantasy+Draft+Night&amp;startdt=2026-09-28T00%3A30%3A00Z&amp;enddt=2026-09-28T02%3A30%3A00Z&amp;body=Live+ESPN+Fantasy+Hockey+draft+for+the+Tennis+tries+Hockey+league.+All+7+managers+draft+together.%3Cbr%3E%3Cbr%3EJoin+the+draft+room+from+the+league+page+a+few+minutes+early%3A%3Cbr%3Ehttps%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880%3Cbr%3E%3Cbr%3ECan%27t+make+it%3F+ESPN+auto-drafts+for+you+from+your+pre-draft+rankings.&amp;location=ESPN+Fantasy+Hockey+%C2%B7+https%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880" target="_blank" rel="noopener">Outlook.com <small>Hotmail · Live</small></a>
+      <a class="calbtn" data-cal="o365" href="https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&amp;rru=addevent&amp;subject=Tennis+tries+Hockey+%C2%B7+Fantasy+Draft+Night&amp;startdt=2026-09-28T00%3A30%3A00Z&amp;enddt=2026-09-28T02%3A30%3A00Z&amp;body=Live+ESPN+Fantasy+Hockey+draft+for+the+Tennis+tries+Hockey+league.+All+7+managers+draft+together.%3Cbr%3E%3Cbr%3EJoin+the+draft+room+from+the+league+page+a+few+minutes+early%3A%3Cbr%3Ehttps%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880%3Cbr%3E%3Cbr%3ECan%27t+make+it%3F+ESPN+auto-drafts+for+you+from+your+pre-draft+rankings.&amp;location=ESPN+Fantasy+Hockey+%C2%B7+https%3A%2F%2Ffantasy.espn.com%2Fhockey%2Fleague%3FleagueId%3D450310880" target="_blank" rel="noopener">Outlook 365 <small>Work · School</small></a>
+      <button class="calbtn copy" id="copyCal" type="button">Copy details <small>Anything else</small></button>
+    </div>
+  </div>
+
+  <div class="dt-kpi-grid persp">
+    <div class="dt-card tilt dt-kpi-card" style="--acc:var(--dt-neon-cyan)"><div class="dt-kpi-label">Managers</div><div class="dt-kpi-value">7</div><div class="dt-kpi-sub">One draft room, same time</div></div>
+    <div class="dt-card tilt dt-kpi-card" style="--acc:var(--dt-neon-pink)"><div class="dt-kpi-label">Divisions</div><div class="dt-kpi-value">2</div><div class="dt-kpi-sub">4 East · 3 West</div></div>
+    <div class="dt-card tilt dt-kpi-card" style="--acc:var(--dt-neon-green)"><div class="dt-kpi-label">Opening-night games</div><div class="dt-kpi-value">5</div><div class="dt-kpi-sub">Tue 09.29 · first puck 4:00 PM CT</div></div>
+    <div class="dt-card tilt dt-kpi-card" style="--acc:var(--dt-neon-amber)"><div class="dt-kpi-label">Puck drop in</div><div class="dt-kpi-value" id="kCount">—</div><div class="dt-kpi-sub">CAR–FLA · 4:00 PM CT</div></div>
+  </div>
+
+  <!-- DRAFT NIGHT -->
+  <div class="dt-section-label"><span class="dt-section-label-text">01 · Draft night</span><span class="dt-section-label-line"></span></div>
+  <h2 class="sec">How it goes down</h2>
+  <p class="dt-section-sub">Everyone drafts in the same live room at the same time.</p>
+  <div class="info-grid persp">
+    <div class="dt-card tilt info">
+      <h3>The room</h3>
+      <ul>
+        <li><b>Where</b><span>ESPN Fantasy app or site, from the league page</span></li>
+        <li><b>When</b><span>Sunday 09.27 at 7:30 PM CT sharp</span></li>
+        <li><b>Who</b><span>All seven managers, live, together</span></li>
+        <li><b>Miss it?</b><span>ESPN auto-drafts for you from your pre-draft rankings</span></li>
+      </ul>
+    </div>
+    <div class="dt-card tilt info">
+      <h3>Before you log on</h3>
+      <ol>
+        <li>Update the ESPN Fantasy app.</li>
+        <li>Set your pre-draft rankings so your queue is ready.</li>
+        <li>Join the room a few minutes early.</li>
+        <li>Find a solid connection. Picks run on a clock.</li>
+      </ol>
+      <a class="btn" href="https://fantasy.espn.com/hockey/league?leagueId=450310880" target="_blank" rel="noopener">Open the league</a>
+    </div>
+  </div>
+
+  <!-- ROSTER -->
+  <div class="dt-section-label"><span class="dt-section-label-text">02 · League members</span><span class="dt-section-label-line"></span></div>
+  <h2 class="sec">The Field</h2>
+  <p class="dt-section-sub">Tennis tries Hockey · 2026–27 · two divisions</p>
+  <div class="dt-card table-card">
+    <table>
+      <thead><tr><th>#</th><th>Abbrv</th><th>Team</th><th>Manager</th><th>Division</th></tr></thead>
+      <tbody id="roster"></tbody>
+    </table>
+  </div>
+
+  <!-- PRIZE -->
+  <div class="dt-section-label"><span class="dt-section-label-text">03 · Champion's prize</span><span class="dt-section-label-line"></span></div>
+  <div class="dt-card prize">
+    <div>
+      <div class="dt-dash-eyebrow">Winner takes the sweater</div>
+      <h3>An <em>authentic</em> NHL jersey. Any player. Your call.</h3>
+      <p>Win the league and you pick the jersey: any team, any player, home or away. Authentic on-ice cut with layered twill numbers, a laced collar and a fight strap, not a screen-printed replica.</p>
+      <div class="specs">
+        <div><span>Cut</span><b>Authentic on-ice</b></div>
+        <div><span>Player</span><b>Winner's choice</b></div>
+        <div><span>Team</span><b>Any NHL club</b></div>
+        <div><span>Colorway</span><b>Home or away</b></div>
+      </div>
+    </div>
+    <div class="jerseys" aria-label="Illustration of the prize jersey, front and back">
+      <figure>
+        <svg viewBox="0 0 360 340" role="img" aria-label="Sparkling black jersey, front, with crest">
+          <use href="#j-all" fill="none" stroke="url(#rim)" stroke-width="5" filter="url(#bloom)" opacity=".7"/>
+          <use href="#j-shell"/>
+          <path d="M163 33 L180 70 L197 33 Q180 42 163 33 Z" fill="#050507"/>
+          <path d="M150 21 Q180 44 210 21" fill="none" stroke="#050507" stroke-width="9" stroke-linecap="round"/>
+          <path d="M150 21 Q180 44 210 21" fill="none" stroke="url(#holoN)" stroke-width="3.5" stroke-linecap="round" filter="url(#neon)"/>
+          <path d="M163 33 L180 70 L197 33" fill="none" stroke="url(#holoN)" stroke-width="2.5" stroke-linejoin="round"/>
+          <g stroke="#f7f9ff" stroke-width="1.8" stroke-linecap="round"><path d="M168 42 L190 50"/><path d="M192 42 L170 50"/><path d="M172 52 L186 58"/><path d="M188 52 L174 58"/></g>
+          <g fill="#f7f9ff"><circle cx="168" cy="42" r="1.6"/><circle cx="192" cy="42" r="1.6"/><circle cx="172" cy="52" r="1.4"/><circle cx="188" cy="52" r="1.4"/></g>
+          <use href="#jcrest" transform="translate(180 170) scale(1.12)"/>
+          <text x="244" y="112" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="40"  fill="none" stroke="url(#holo)" stroke-width="6.4" stroke-linejoin="round" filter="url(#neon)">C</text><text x="244" y="112" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="40"  fill="none" stroke="#050507" stroke-width="3.6" stroke-linejoin="round">C</text><text x="244" y="112" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="40"  fill="#f7f9ff">C</text>
+          <g transform="translate(66 142) rotate(18)"><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="none" stroke="url(#holo)" stroke-width="5.4" stroke-linejoin="round" filter="url(#neon)">26</text><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="none" stroke="#050507" stroke-width="3.1" stroke-linejoin="round">26</text><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="#f7f9ff">26</text></g>
+          <g transform="translate(294 142) rotate(-18)"><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="none" stroke="url(#holo)" stroke-width="5.4" stroke-linejoin="round" filter="url(#neon)">26</text><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="none" stroke="#050507" stroke-width="3.1" stroke-linejoin="round">26</text><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="#f7f9ff">26</text></g>
+          <g clip-path="url(#c-all)"><use href="#glint" class="twk" style="animation-delay:0.00s" transform="translate(130 110) scale(0.8)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:0.53s" transform="translate(232 130) scale(0.8)" fill="#bff4ff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:1.06s" transform="translate(150 230) scale(1.2)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:1.59s" transform="translate(215 205) scale(0.6)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:2.12s" transform="translate(86 190) scale(0.6)" fill="#bff4ff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:2.65s" transform="translate(276 170) scale(1)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:3.18s" transform="translate(45 215) scale(0.8)" fill="#ffffff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:3.71s" transform="translate(318 230) scale(1.2)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:4.24s" transform="translate(190 300) scale(1.2)" fill="#bff4ff" filter="url(#twglow)"/></g>
+          <g clip-path="url(#c-all)"><g transform="rotate(18 180 170)"><rect class="sweep" x="-120" y="-80" width="90" height="500" fill="url(#sweepG)"/></g></g>
+        </svg>
+        <figcaption>Home · front</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 360 340" role="img" aria-label="Sparkling black jersey, back, with nameplate and number">
+          <use href="#j-all" fill="none" stroke="url(#rim)" stroke-width="5" filter="url(#bloom)" opacity=".7"/>
+          <use href="#j-shell"/>
+          <path d="M150 21 Q180 30 210 21" fill="none" stroke="#050507" stroke-width="9" stroke-linecap="round"/>
+          <path d="M150 21 Q180 30 210 21" fill="none" stroke="url(#holoN)" stroke-width="3.5" stroke-linecap="round" filter="url(#neon)"/>
+          <path id="nameArc" d="M106 112 Q180 86 254 112" fill="none"/>
+          <text font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="700" font-size="21" letter-spacing="2" fill="#f7f9ff">
+            <textPath href="#nameArc" startOffset="50%" text-anchor="middle" textLength="140" lengthAdjust="spacingAndGlyphs">YOUR PLAYER</textPath>
+          </text>
+          <text x="177" y="226" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="100" textLength="116" lengthAdjust="spacingAndGlyphs" fill="none" stroke="url(#holo)" stroke-width="16" stroke-linejoin="round" filter="url(#neon)">26</text><text x="177" y="226" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="100" textLength="116" lengthAdjust="spacingAndGlyphs" fill="none" stroke="#050507" stroke-width="9" stroke-linejoin="round">26</text><text x="177" y="226" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="100" textLength="116" lengthAdjust="spacingAndGlyphs" fill="#f7f9ff">26</text>
+          <g transform="translate(66 142) rotate(18)"><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="none" stroke="url(#holo)" stroke-width="5.4" stroke-linejoin="round" filter="url(#neon)">26</text><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="none" stroke="#050507" stroke-width="3.1" stroke-linejoin="round">26</text><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="#f7f9ff">26</text></g>
+          <g transform="translate(294 142) rotate(-18)"><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="none" stroke="url(#holo)" stroke-width="5.4" stroke-linejoin="round" filter="url(#neon)">26</text><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="none" stroke="#050507" stroke-width="3.1" stroke-linejoin="round">26</text><text x="0" y="12" text-anchor="middle" font-family="'Exo 2', 'Arial', sans-serif" font-style="italic" font-weight="900" font-size="34"  fill="#f7f9ff">26</text></g>
+          <rect x="170" y="296" width="20" height="10" rx="1.5" fill="url(#holo)"/>
+          <g clip-path="url(#c-all)"><use href="#glint" class="twk" style="animation-delay:0.00s" transform="translate(130 110) scale(0.8)" fill="#ffffff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:0.53s" transform="translate(232 130) scale(0.8)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:1.06s" transform="translate(150 230) scale(1.2)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:1.59s" transform="translate(215 205) scale(0.6)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:2.12s" transform="translate(86 190) scale(0.6)" fill="#ffffff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:2.65s" transform="translate(276 170) scale(0.6)" fill="#bff4ff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:3.18s" transform="translate(45 215) scale(0.6)" fill="#bff4ff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:3.71s" transform="translate(318 230) scale(1.2)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:4.24s" transform="translate(190 300) scale(1.2)" fill="#ffd1ee" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:4.77s" transform="translate(120 280) scale(1.2)" fill="#bff4ff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:5.30s" transform="translate(245 285) scale(1.2)" fill="#ffffff" filter="url(#twglow)"/><use href="#glint" class="twk" style="animation-delay:5.83s" transform="translate(170 95) scale(1)" fill="#ffffff" filter="url(#twglow)"/></g>
+          <g clip-path="url(#c-all)"><g transform="rotate(18 180 170)"><rect class="sweep s2" x="-120" y="-80" width="90" height="500" fill="url(#sweepG)"/></g></g>
+        </svg>
+        <figcaption>Home · back</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- DATES -->
+  <div class="dt-section-label"><span class="dt-section-label-text">04 · Road to opening night</span><span class="dt-section-label-line"></span></div>
+  <h2 class="sec">Road to Opening Night</h2>
+  <div class="timeline">
+    <div class="hot"><b>SUN 09.27 · 7:30 PM CT</b><span>Draft night. All seven managers, live on ESPN.</span></div>
+    <div><b>MON 09.28</b><span>Review your roster and set your opening-night lineup.</span></div>
+    <div class="end"><b>TUE 09.29 · 4:00 PM CT</b><span>NHL opening night. Five games, points start counting.</span></div>
+    <div><b>WED 09.30</b><span>PHI–PIT and COL–LAK on TNT.</span></div>
+  </div>
+
+  <div class="dt-card slate">
+    <div class="slate-head"><span class="dt-dash-eyebrow">Opening night slate</span><span class="slate-date">Tuesday · Sept 29 · times CT</span></div>
+    <div class="games">
+      <div class="game"><span class="t">4:00 PM</span><span class="m">CAR <em>–</em> FLA</span><span class="n">Carolina · Florida</span><span class="tv">ESPN</span></div>
+      <div class="game"><span class="t">6:00 PM</span><span class="m">TOR <em>–</em> MTL</span><span class="n">Toronto · Montreal</span><span class="tv">Sportsnet</span></div>
+      <div class="game"><span class="t">7:00 PM</span><span class="m">BOS <em>–</em> NYR</span><span class="n">Boston · NY Rangers</span><span class="tv">ESPN</span></div>
+      <div class="game"><span class="t">9:00 PM</span><span class="m">EDM <em>–</em> VAN</span><span class="n">Edmonton · Vancouver</span><span class="tv">Sportsnet</span></div>
+      <div class="game"><span class="t">9:30 PM</span><span class="m">VGK <em>–</em> CHI</span><span class="n">Vegas · Chicago</span><span class="tv">ESPN</span></div>
+    </div>
+  </div>
+
+  <footer>
+    <span>TENNIS TRIES HOCKEY · ESPN LEAGUE <a href="https://fantasy.espn.com/hockey/league?leagueId=450310880" target="_blank" rel="noopener">450310880</a></span>
+    <span>COMMISSIONER · BRANDON</span>
+  </footer>
+</div>
+
+<div class="cal-modal" id="calModal" hidden role="dialog" aria-modal="true" aria-labelledby="calModalTitle">
+  <div class="cal-backdrop" data-close></div>
+  <div class="dt-card cal-panel">
+    <button class="cal-x" type="button" aria-label="Close" data-close>×</button>
+    <div class="dt-dash-eyebrow">Don't miss the draft</div>
+    <h2 id="calModalTitle">Add Draft Night to your calendar</h2>
+    <p class="cal-when">Sunday, Sept 27 · <b>7:30 PM CT</b><br><span>8:30 ET · 6:30 MT · 5:30 PT · 30-minute reminder included</span></p>
+    <a class="cal-primary" id="calPrimary" href="#" target="_blank" rel="noopener">Add to calendar</a>
+    <p class="cal-hint" id="calHint" hidden>Opens the event file. iPhone: tap <b>Add</b>. Mac: open the download and Calendar adds it.</p>
+    <p class="cal-or">Or pick yours</p>
+    <div class="cal-alt" id="calAlt"></div>
+    <button class="cal-later" type="button" data-close>Maybe later</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const TEAMS = [
+    {abbr:"BFT", name:"Brandon's 🔥 Team", mgr:"Brandon A.", div:"East", c:"#c21f3a", gm:true},
+    {abbr:"KHB", name:"Kraken Hockey Baby", mgr:"Brian A.", div:"West", c:"#1f6fb8"},
+    {abbr:"BBT", name:"Bill's Beastly Team", mgr:"Bill R.", div:"East", c:"#7a5230"},
+    {abbr:"LLT", name:"Lisa's Loud Team", mgr:"Lisa R.", div:"West", c:"#e3c229"},
+    {abbr:"JST", name:"Jan's Scary Team", mgr:"Jan P.", div:"East", c:"#8fd1a6"},
+    {abbr:"KTT", name:"Kirstin's Wooftastic Team", mgr:"Kirstin B.", div:"West", c:"#c98a4b"},
+    {abbr:"MMT", name:"Molly's Magnificent Team", mgr:"Molly A.", div:"East", c:"#5b2e91"}
+  ];
+  const NS="http://www.w3.org/2000/svg";
+  const JPATH="M150 21 Q180 44 210 21 L242 30 C290 44 326 110 346 262 L296 286 L256 120 L262 318 Q180 332 98 318 L104 120 L64 286 L14 262 C34 110 70 44 118 30 Z";
+  function mini(t){
+    const s=document.createElementNS(NS,"svg"); s.setAttribute("viewBox","0 0 360 340"); s.setAttribute("class","mini");
+    const tt=document.createElementNS(NS,"title"); tt.textContent=t.mgr; s.append(tt);
+    const p=document.createElementNS(NS,"path"); p.setAttribute("d",JPATH); p.setAttribute("fill",t.c); p.setAttribute("stroke","#eaf6ff"); p.setAttribute("stroke-width","10"); p.setAttribute("stroke-opacity",".55"); s.append(p);
+    const b=document.createElementNS(NS,"path"); b.setAttribute("d","M100 262 H260 V284 H100 Z"); b.setAttribute("fill","#fff"); b.setAttribute("opacity",".75"); s.append(b);
+    const n=document.createElementNS(NS,"path"); n.setAttribute("d","M150 21 Q180 44 210 21"); n.setAttribute("fill","none"); n.setAttribute("stroke","#fff"); n.setAttribute("stroke-width","14"); s.append(n);
+    return s;
+  }
+  const $=s=>document.querySelector(s);
+  const tb=$("#roster");
+  TEAMS.forEach((t,i)=>{
+    const tr=document.createElement("tr");
+    const n=document.createElement("td"); n.className="num"; n.textContent=String(i+1).padStart(2,"0");
+    const a=document.createElement("td"); a.className="abbr"; a.textContent=t.abbr;
+    const tm=document.createElement("td"); const d=document.createElement("div"); d.className="team"; d.append(mini(t)); const nm=document.createElement("span"); nm.textContent=t.name; d.append(nm); tm.append(d);
+    const mg=document.createElement("td"); mg.textContent=t.mgr; if(t.gm){const g=document.createElement("span");g.className="gm";g.textContent="GM";mg.append(g);}
+    const dv=document.createElement("td"); const p=document.createElement("span"); p.className="pill "+t.div.toLowerCase(); p.textContent=t.div; dv.append(p);
+    tr.append(n,a,tm,mg,dv);
+    tr.addEventListener("mousemove",e=>{const r=tr.getBoundingClientRect(); tr.style.setProperty("--dt-x",((e.clientX-r.left)/r.width*100)+"%");});
+    tb.append(tr);
+  });
+
+  // Countdowns
+  const DRAFT=Date.parse("2026-09-27T19:30:00-05:00"), PUCK=Date.parse("2026-09-29T16:00:00-05:00");
+  function fmt(ms,long){
+    const d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4);
+    return long ? (d?d+"d ":"")+String(h).padStart(2,"0")+"h "+String(m).padStart(2,"0")+"m"
+                : d+'<span class="dt-kpi-unit">d</span> '+String(h).padStart(2,"0")+'<span class="dt-kpi-unit">h</span>';
+  }
+  function tick(){
+    const now=Date.now();
+    const dl=DRAFT-now; $("#dCount").textContent = dl>0 ? fmt(dl,true) : (now-DRAFT<3*36e5 ? "LIVE NOW" : "DONE");
+    const pl=PUCK-now; if(pl>0) $("#kCount").innerHTML=fmt(pl,false); else $("#kCount").textContent="LIVE";
+  }
+  tick(); setInterval(tick,30000);
+
+
+  // Copy event details
+  const CAL_TEXT="Tennis tries Hockey · Fantasy Draft Night\nSunday, Sept 27, 2026 · 7:30–9:30 PM CT (8:30 ET · 6:30 MT · 5:30 PT)\nLive on ESPN Fantasy: https://fantasy.espn.com/hockey/league?leagueId=450310880";
+  const cb=$("#copyCal");
+  cb.addEventListener("click",()=>{
+    const done=()=>{cb.firstChild.textContent="Copied ";setTimeout(()=>cb.firstChild.textContent="Copy details ",2000);};
+    try{ navigator.clipboard.writeText(CAL_TEXT).then(done,()=>fallback()); }catch(e){ fallback(); }
+    function fallback(){ const t=document.createElement("textarea"); t.value=CAL_TEXT; document.body.append(t); t.select(); try{document.execCommand("copy");done();}catch(e){} t.remove(); }
+  });
+
+
+  // Calendar prompt (pops once per viewer; remembers dismiss/add)
+  (function(){
+    const modal=$("#calModal"); if(!modal) return;
+    const LABEL={google:"Google Calendar",apple:"Apple Calendar",outlook:"Outlook.com",o365:"Outlook 365"};
+    const links={}; document.querySelectorAll("[data-cal]").forEach(a=>links[a.dataset.cal]=a.href);
+    const ua=navigator.userAgent||"";
+    let pick="google";
+    if(/iPhone|iPad|iPod|Macintosh/.test(ua)) pick="apple";
+    else if(/Android/.test(ua)) pick="google";
+    else if(/Windows/.test(ua)) pick="outlook";
+    const prim=$("#calPrimary"); prim.href=links[pick]; prim.textContent="Add to "+LABEL[pick];
+    const alt=$("#calAlt");
+    Object.keys(LABEL).filter(k=>k!==pick).forEach(k=>{const a=document.createElement("a");a.href=links[k];a.target="_blank";a.rel="noopener";a.textContent=LABEL[k];a.dataset.done="1";alt.append(a);});
+    prim.dataset.done="1";
+    if(pick==="apple") $("#calHint").hidden=false;
+    const KEY="tth-cal-prompt";
+    let seen=null; try{ seen=localStorage.getItem(KEY); }catch(e){}
+    let lastFocus=null;
+    function open(){ lastFocus=document.activeElement; modal.hidden=false; prim.focus(); }
+    function close(v){ modal.hidden=true; try{ localStorage.setItem(KEY,v||"dismissed"); }catch(e){} if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+    modal.addEventListener("click",e=>{ if(e.target.closest("[data-close]")) close("dismissed"); else if(e.target.closest("[data-done]")) setTimeout(()=>close("added"),150); });
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!modal.hidden) close("dismissed"); });
+    document.querySelectorAll(".a-cal [data-cal]").forEach(a=>a.addEventListener("click",()=>{ try{localStorage.setItem(KEY,"added");}catch(e){} }));
+    if(!seen && Date.now()<Date.parse("2026-09-27T21:30:00-05:00")) setTimeout(open,1200);
+  })();
+
+  // Parallax tilt
+  if(!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){
+    document.querySelectorAll(".tilt").forEach(el=>{
+      el.addEventListener("mousemove",e=>{const r=el.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+        el.style.setProperty("--dt-ry",(x*6).toFixed(2)+"deg"); el.style.setProperty("--dt-rx",(-y*6).toFixed(2)+"deg");});
+      el.addEventListener("mouseleave",()=>{el.style.setProperty("--dt-rx","0deg");el.style.setProperty("--dt-ry","0deg");});
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
