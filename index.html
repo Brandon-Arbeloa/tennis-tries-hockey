@@ -647,24 +647,25 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
     const ua=navigator.userAgent||"";
     const iOS=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
     const mac=!iOS&&/Macintosh/.test(ua);
-    document.querySelectorAll('[data-cal="apple"]').forEach(a=>{ a.href = mac ? ICS.replace(/^https:/,"webcal:") : ICS; a.removeAttribute("target"); });
-    window.__tthMac=mac;
+    document.querySelectorAll('[data-cal="apple"]').forEach(a=>{ a.href = ICS; a.removeAttribute("target"); if(!iOS) a.hidden = true; });
+    window.__tthIOS=iOS;
   })();
   // Calendar prompt (pops once per viewer; remembers dismiss/add)
   (function(){
     const modal=$("#calModal"); if(!modal) return;
     const LABEL={google:"Google Calendar",apple:"Apple Calendar",outlook:"Outlook.com",o365:"Outlook 365"};
+    if(!window.__tthIOS) delete LABEL.apple;
     const links={}; document.querySelectorAll("[data-cal]").forEach(a=>links[a.dataset.cal]=a.href);
     const ua=navigator.userAgent||"";
     let pick="google";
-    if(/iPhone|iPad|iPod|Macintosh/.test(ua)) pick="apple";
+    if(window.__tthIOS) pick="apple";
     else if(/Android/.test(ua)) pick="google";
     else if(/Windows/.test(ua)) pick="outlook";
     const prim=$("#calPrimary"); prim.href=links[pick]; prim.textContent="Add to "+LABEL[pick];
     const alt=$("#calAlt");
     Object.keys(LABEL).filter(k=>k!==pick).forEach(k=>{const a=document.createElement("a");a.href=links[k];if(k!=="apple")a.target="_blank";a.rel="noopener";a.textContent=LABEL[k];a.dataset.done="1";alt.append(a);});
     prim.dataset.done="1";
-    if(pick==="apple"){ prim.removeAttribute("target"); const h=$("#calHint"); h.innerHTML = window.__tthMac ? "Your Calendar app opens. Click <b>Subscribe</b>, then <b>OK</b>." : "Tap <b>Add All</b> on the screen that opens."; h.hidden=false; }
+    if(pick==="apple"){ prim.removeAttribute("target"); const h=$("#calHint"); h.innerHTML = "Tap <b>Add All</b> on the screen that opens."; h.hidden=false; }
     const KEY="tth-cal-added";
     let added=null; try{ added=localStorage.getItem(KEY); localStorage.removeItem("tth-cal-prompt"); }catch(e){}
     let lastFocus=null;
