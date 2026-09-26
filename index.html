@@ -655,15 +655,15 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid rgba(0,217,255,.14)
     Object.keys(LABEL).filter(k=>k!==pick).forEach(k=>{const a=document.createElement("a");a.href=links[k];a.target="_blank";a.rel="noopener";a.textContent=LABEL[k];a.dataset.done="1";alt.append(a);});
     prim.dataset.done="1";
     if(pick==="apple") $("#calHint").hidden=false;
-    const KEY="tth-cal-prompt";
-    let seen=null; try{ seen=localStorage.getItem(KEY); }catch(e){}
+    const KEY="tth-cal-added";
+    let added=null; try{ added=localStorage.getItem(KEY); localStorage.removeItem("tth-cal-prompt"); }catch(e){}
     let lastFocus=null;
     function open(){ lastFocus=document.activeElement; modal.hidden=false; prim.focus(); }
-    function close(v){ modal.hidden=true; try{ localStorage.setItem(KEY,v||"dismissed"); }catch(e){} if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+    function close(v){ modal.hidden=true; if(v==="added"){ try{ localStorage.setItem(KEY,"1"); }catch(e){} } if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
     modal.addEventListener("click",e=>{ if(e.target.closest("[data-close]")) close("dismissed"); else if(e.target.closest("[data-done]")) setTimeout(()=>close("added"),150); });
     document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!modal.hidden) close("dismissed"); });
-    document.querySelectorAll(".a-cal [data-cal]").forEach(a=>a.addEventListener("click",()=>{ try{localStorage.setItem(KEY,"added");}catch(e){} }));
-    if(!seen && Date.now()<Date.parse("2026-09-27T21:30:00-05:00")) setTimeout(open,1200);
+    document.querySelectorAll(".a-cal [data-cal]").forEach(a=>a.addEventListener("click",()=>{ try{localStorage.setItem(KEY,"1");}catch(e){} }));
+    if(!added && Date.now()<Date.parse("2026-09-27T21:30:00-05:00")) setTimeout(open,1200);
   })();
 
   // Parallax tilt
